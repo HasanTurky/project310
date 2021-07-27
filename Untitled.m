@@ -4,15 +4,15 @@ close all
 clc
 
 %% channel parameters
-L =1200;                 %length in m
+L =10;                 %length in m
 a = 6 ;                %transmitter height
 b = 11 ;                %receiver height
 h = 16;                %surface height
-o =105;                 %order
-r =.5;                 %surface reflection coefficient
+o = 100;                 %order
+r =1.33;                 %surface reflection coefficient
 %% Simulation Parameters
 %Moduluation method: QPSK, 8PSK, 16QAM
-modulation_method = 3 ; %1, 2, or 3
+modulation_method = 1 ; %1, 2, or 3
 
 %fft bin Size
 fftSize = 64;
@@ -29,8 +29,11 @@ channel_tap = 2; % for time delay in channel
 % mod_order = find(ismember(mod_methods,mod_method));
 
 %% Read the image and convert it into binary format.
-im = imread('eagle2.jpg');
-im_bin = dec2bin(im(:))';
+im1 = imread('eagle2.jpg');
+im2 = imread('im2.jpg')
+im_bin1 = dec2bin(im1(:))';
+im_bin2 = dec2bin(im2(:))'
+im_bin = [im_bin1 im_bin2];
 im_bin = im_bin(:);
 im_bin_stored = im_bin;
 
@@ -182,13 +185,13 @@ ber = sum(abs(reconstructed_binary_image-im_bin_stored))/length(im_bin_stored);
 %% recover image
 reconstructed_image = reshape(reconstructed_binary_image,8,numel(reconstructed_binary_image)/8);
 reconstructed_image = uint8(bin2dec(reconstructed_image'));
-reconstructed_image = reshape(reconstructed_image,size(im));
+reconstructed_image = reshape(reconstructed_image,size(im1));
 
 %% result observation
 
 % Original image
 subplot(1,2,1);
-imshow(im);
+imshow(im1);
 title('Transmitted Image');
 
 % Recovered image
